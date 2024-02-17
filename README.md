@@ -41,13 +41,15 @@ cd grades-calculator
 
 Clone the repository, write in console: 
 ```
-git clone [[https://github.com/EASS-HIT-PART-A-2022-CLASS-II/Elad_Mor_Project.git](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator.git)](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator.git)
+git clone https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator.git
 ```
 
 ## Running the Application
 Clone the repository to your local machine. Then, navigate to the root of the project in the terminal and run:
 
-```docker-compose up```
+```
+docker-compose up
+```
 
 This will build the Docker images and start the containers. Once the containers are running, you can access the frontend in your web browser at
 http://localhost:8502.
