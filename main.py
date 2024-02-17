@@ -54,17 +54,10 @@ async def update_course(item_id: str, course: Course):
         print("Received item_id:", item_id)
         print("Received course data:", course)
 
-        # Convert the received course object to a dictionary
-        course_dict = course.to_dict()
+        new_course = json.dumps(course.to_dict())
+        r.set(item_id, new_course)
 
-        # Check if the course with the given item_id exists
-        if r.exists(item_id):
-            # Update the course in Redis with the new data
-            r.set(item_id, json.dumps(course_dict))
-            return {"update": "success"}
-        else:
-            # If the course does not exist, raise a 404 error
-            raise HTTPException(status_code=404, detail="Course not found")
+        return {"update": "success"}
     except Exception as e:
         print("An error occurred during course update:", e)
         return {"update": "failed", "error": str(e)}
@@ -74,21 +67,13 @@ async def update_course(item_id: str, course: Course):
 @app.delete("/courses/{item_id}")
 async def delete_course(item_id: str):
     try:
-        print("Attempting to delete course with item_id:", item_id)
-
-        # Check if the course exists
         if r.exists(item_id):
-            print("Course found. Deleting...")
             r.delete(item_id)
-            print("Course deleted successfully.")
             return {"message": "Course deleted successfully"}
         else:
-            print("Course not found.")
             raise HTTPException(status_code=404, detail="Course not found")
     except Exception as e:
-        error_message = f"Failed to delete course: {str(e)}"
-        print(error_message)
-        raise HTTPException(status_code=500, detail=error_message)
+        raise HTTPException(status_code=500, detail=f"Failed to delete course: {str(e)}")
     
 
 
