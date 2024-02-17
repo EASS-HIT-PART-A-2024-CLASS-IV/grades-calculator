@@ -1,8 +1,9 @@
-# Grades Calculator App
 
  [![image](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator/assets/131989545/c214de5f-f324-4313-99dd-a0301a6e06e4)
 ](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator/blob/main/frontend/LOGO-CALCULATOR2.png)
 
+
+# Grades Calculator App
 
 This project is a Grades Calculator application built with:
 
