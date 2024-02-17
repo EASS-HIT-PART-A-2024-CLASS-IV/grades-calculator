@@ -171,18 +171,7 @@ def calculate_average():
 
 def main():
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    # Add background photo with URL
-=======
     # Add background photo URL
->>>>>>> origin/main
-=======
-    # Add background photo URL
-=======
-    # Add background photo with URL
->>>>>>> 6ebdb68 (update)
->>>>>>> d92ebe0 (update)
     background_image_url = "https://png.pngtree.com/background/20210717/original/pngtree-chic-mathematics-subject-for-high-school-9th-grade-geometry-picture-image_1443162.jpg"
 
     # Add CSS for background photo
@@ -214,7 +203,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/main
