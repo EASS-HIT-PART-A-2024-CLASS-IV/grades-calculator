@@ -23,7 +23,6 @@ The application allows users to:
   * Semester-year wide
 - Grades simulator
   
-as well as view all tasks in a list. The backend is built with FastAPI and connected to Redis for data storage. The frontend is built with Streamlit and communicates with the backend to retrieve and manipulate data.
 
 # Prerequisites
 You will need to have Docker and Docker Compose installed on your machine in order to run the application.
