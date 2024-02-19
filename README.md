@@ -77,8 +77,10 @@ Once you have filled in the fields, click on the Add button to add the course to
 ### View/ Update/ Delete
 This section displays a table of all the courses you have created.
 - You can choose one course from all of the courses by choosing in the selectbox.
-- You can see the data of this course and also have the options to update the data or delete the course by clicking on the buttons.
-
+- You can see the data of this course, by clicking on the buttons, you can:
+  * Update the data
+  * Delete the course
+    
 ### Calculate Average
 This section allows you to calculate the weighted averages to the DB that you have entered.
 Select the method option that you want to calculate from the dropdown menu:
