@@ -46,6 +46,12 @@ Clone the repository:
 git clone https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator.git
 ```
 
+
+Change to the new directory:
+```
+cd grades-calculator
+`
+
 ## Running the Application
 Clone the repository to your local machine. Then, navigate to the root of the project in the terminal and run:
 
