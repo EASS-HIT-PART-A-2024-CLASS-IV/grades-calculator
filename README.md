@@ -1,11 +1,19 @@
 
  [![image](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator/assets/131989545/c214de5f-f324-4313-99dd-a0301a6e06e4)
-](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator/blob/main/frontend/LOGO-CALCULATOR2.png)
+](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator/blob/main/frontend/mylogo.png)
+
+
+# Welcome to the Grades Calculator App!
 
 
 # Grades Calculator App
 
-This project is a Grades Calculator application built with:
+This application is designed to help you manage and analyze your courses and grades with ease. Whether you're a student keeping track of your academic progress or an educator managing course data, this app provides a user-friendly interface to view, add, update, and delete courses, calculate weighted averages, and even simulate grade changes.
+
+Enjoy exploring your academic journey with the Grades Calculator App!
+
+
+This project is a Grades Calculator application that built with:
 
 - Docker Compose
 - FastAPI
