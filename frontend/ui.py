@@ -69,27 +69,24 @@ def view_course():
     selected_course_name = st.selectbox("Select Course", [""] + [course["course_name"] for course in courses])
 
     if selected_course_name:
+        # Call print_course() function to display the details of the selected course
+        print_course(courses, selected_course_name)
+
         selected_course_data = next((course for course in courses if course["course_name"] == selected_course_name), None)
 
         if selected_course_data:
-            st.subheader("Selected Course Details:")
-            st.markdown(f"**Course Name:** {selected_course_data['course_name']}")
-            st.markdown(f"**Course Grade:** {selected_course_data['course_grade']}")
-            st.markdown(f"**Course Credit:** {selected_course_data.get('course_credit', 'Information not available')}")
-            st.markdown(f"**Course Year:** {selected_course_data['course_year']}")
-            st.markdown(f"**Course Semester:** {selected_course_data['course_semester']}")
-            st.markdown(f"**Course ID:** {selected_course_data['id']}")
-
             # Add buttons for update and delete actions
             col1, col2 = st.columns(2)
             with col1:
                 if st.button("Update", key=f"update_{selected_course_data['id']}"):
-                    update_course(selected_course_data)
+                    update_course(courses, selected_course_name)
             with col2:
                 if st.button("Delete", key=f"delete_{selected_course_data['id']}"):
-                    delete_course(selected_course_data['id'])
-        else:
-            st.error("No course selected.")
+                    delete_course(courses, selected_course_name)
+
+
+
+
 
 def calculate_average():
     st.header("Calculate Average")
@@ -100,18 +97,6 @@ def calculate_average():
 
     if selected_average_option == "All courses":
         calculate_weighted_average_for_all_courses()
-        # Add button to delete all courses
-        if st.button("Delete All Courses"):
-            confirm_delete = st.checkbox("Confirm deletion of all courses")
-            if confirm_delete:
-                try:
-                    response = requests.delete(f"{BACKEND_URL}/courses")
-                    if response.status_code == 200:
-                        st.success("All courses deleted successfully.")
-                    else:
-                        st.error(f"Failed to delete all courses. Status code: {response.status_code}")
-                except requests.exceptions.RequestException as e:
-                    st.error(f"Failed to delete all courses. Error: {e}")
     elif selected_average_option == "By semester & year":
         calculate_weighted_average_by_year_semester()
         plot_average_grade_by_semester()
@@ -162,19 +147,24 @@ def simulate_grade_change():
 
                     # Create a DataFrame for the results
                     data = {
-                        "Aspect": ["Total Average"] + list(prev_avg_by_year.keys()) + list(prev_avg_by_semester.keys()),
-                        "Previous Average": [prev_avg_all_courses] + list(prev_avg_by_year.values()) + list(prev_avg_by_semester.values()),
-                        "New Average": [updated_avg_all_courses] + list(updated_avg_by_year.values()) + list(updated_avg_by_semester.values()),
-                        "Difference": [diff_avg_all_courses] + list(diff_avg_by_year.values()) + list(diff_avg_by_semester.values())
+                        "Aspect": ["Total Average", selected_course_data['course_year'], selected_course_data['course_semester']],
+                        "Previous Average": [prev_avg_all_courses, prev_avg_by_year[selected_course_data['course_year']], prev_avg_by_semester[selected_course_data['course_semester']]],
+                        "New Average": [updated_avg_all_courses, updated_avg_by_year[selected_course_data['course_year']], updated_avg_by_semester[selected_course_data['course_semester']]],
+                        "Difference": [diff_avg_all_courses, diff_avg_by_year[selected_course_data['course_year']], diff_avg_by_semester[selected_course_data['course_semester']]]
                     }
                     df = pd.DataFrame(data)
                     
                     # Remove rows where the difference is 0
                     df = df[df['Difference'] != 0]
                     
+                    # Apply color to the difference column based on the sign of the difference
+                    def color_negative_red(val):
+                        color = 'red' if val < 0 else 'green'
+                        return f'color: {color}'
+
                     # Display the table
                     st.subheader("Grade Change Summary")
-                    st.table(df)
+                    st.table(df.style.applymap(color_negative_red, subset=['Difference']))
                     
                     # Reset the grade back to its original value
                     selected_course_data["course_grade"] = prev_grade
@@ -185,61 +175,120 @@ def simulate_grade_change():
             st.error("No course selected.")
 
 
+
 # VIEW FUNCTION
 
-def delete_course(course_id):
-    # Assuming r is your Redis connection
-    r.delete(course_id)
-    return {"message": "Course deleted successfully"}
+def print_course(courses, selected_course_name):
+    st.header("View Course")
 
+    if not courses:
+        st.write("No courses available.")
+        return
 
-def update_course(course_data):
-    st.subheader("Update Course")
-    update_button = st.button("Update")
-    
-    if update_button:
-        st.markdown(f"**Course Name:** {course_data['course_name']}")
-        st.markdown(f"**Current Course Grade:** {course_data['course_grade']}")
-        st.markdown(f"**Course Credit:** {course_data['course_credit']}")
-        st.markdown(f"**Course Year:** {course_data['course_year']}")
-        st.markdown(f"**Course Semester:** {course_data['course_semester']}")
+    selected_course_data = next((course for course in courses if course["course_name"] == selected_course_name), None)
 
-        new_grade = st.slider("New Course Grade", min_value=0, max_value=100, step=1, value=course_data["course_grade"])
+    if selected_course_data:
+        st.subheader("Selected Course Details:")
+        st.markdown(f"**Course Name:** {selected_course_data['course_name']}")
+        st.markdown(f"**Course Grade:** {selected_course_data['course_grade']}")
+        st.markdown(f"**Course Credit:** {selected_course_data.get('course_credit', 'Information not available')}")
+        st.markdown(f"**Course Year:** {selected_course_data['course_year']}")
+        st.markdown(f"**Course Semester:** {selected_course_data['course_semester']}")
+        st.markdown(f"**Course ID:** {selected_course_data['id']}")
+    else:
+        st.error("No course selected.")
 
-        if st.button("Simulate Grade Change"):
+def update_course(courses, selected_course_name):
+    st.header("Update Course")
+
+    if not courses:
+        st.write("No courses available.")
+        return
+
+    # Find the selected course
+    selected_course = next((course for course in courses if course["course_name"] == selected_course_name), None)
+    if selected_course:
+        
+        new_course_name = st.text_input("New Course Name", value=selected_course["course_name"])
+        new_grade = st.slider("New Course Grade", min_value=0, max_value=100, step=1, value=selected_course["course_grade"])
+        new_credit = st.number_input("New Course Credit", min_value=0.0, step=0.5, value=selected_course["course_credit"])
+        new_year = st.number_input("New Course Year", step=1, value=selected_course["course_year"])
+        new_semester = st.radio("New Semester", ["Semester A", "Semester B", "Semester C"], index=["Semester A", "Semester B", "Semester C"].index(selected_course["course_semester"]))
+            
+        if st.button("Update Course"):
             try:
-                updated_course_data = course_data.copy()
-                updated_course_data["course_grade"] = new_grade
-                response = requests.put(f"{BACKEND_URL}/courses/{course_data['id']}", json=updated_course_data)
-                response.raise_for_status()  # Raise an exception for HTTP errors
-                st.success(f"Successfully simulated grade change. New course grade: {new_grade}")
-
-                # Calculate updated averages and display them in a table
-                prev_avg_all_courses = calculate_weighted_average_for_all_courses()
-                prev_avg_by_semester = calculate_weighted_average_by_semester()
-                prev_avg_by_year = calculate_weighted_average_by_year()
-
-                new_avg_all_courses = calculate_weighted_average_for_all_courses()
-                new_avg_by_semester = calculate_weighted_average_by_semester()
-                new_avg_by_year = calculate_weighted_average_by_year()
-
-                # Calculate the difference between previous and new averages
-                diff_avg_all_courses = new_avg_all_courses - prev_avg_all_courses if prev_avg_all_courses is not None and new_avg_all_courses is not None else None
-                diff_avg_by_semester = new_avg_by_semester - prev_avg_by_semester if prev_avg_by_semester is not None and new_avg_by_semester is not None else None
-                diff_avg_by_year = new_avg_by_year - prev_avg_by_year if prev_avg_by_year is not None and new_avg_by_year is not None else None
-
-                # Display the results in a table
-                st.subheader("Grade Change Summary")
                 data = {
-                    "Metric": ["All Courses", "By Semester", "By Year"],
-                    "Previous Average": [prev_avg_all_courses, prev_avg_by_semester, prev_avg_by_year],
-                    "New Average": [new_avg_all_courses, new_avg_by_semester, new_avg_by_year],
-                    "Difference": [diff_avg_all_courses, diff_avg_by_semester, diff_avg_by_year]
+                    "course_name": new_course_name,
+                    "course_grade": new_grade,
+                    "course_credit": new_credit,
+                    "course_year": new_year,
+                    "course_semester": new_semester
                 }
-                df = pd.DataFrame(data)
-                st.table(df)
+                response = requests.put(f"{BACKEND_URL}/courses/{selected_course['id']}", json=data)
+                response.raise_for_status()  # Raise an exception for HTTP errors
+                st.success("Course updated successfully!")
             except requests.exceptions.RequestException as e:
-                st.error(f"Failed to simulate grade change. Error: {e}")
+                st.error(f"Failed to update course. Error: {e}")
+    else:
+        st.error("No course selected.")
+
+def delete_course(courses, selected_course_name):
+            # Find the selected course
+            selected_course = next((course for course in courses if course["course_name"] == selected_course_name), None)
+            if selected_course:
+                # Delete the course
+                try:
+                    response = requests.delete(f"{BACKEND_URL}/courses/{selected_course['id']}")
+                    response.raise_for_status()  # Raise an exception for HTTP errors
+                    st.success("Successfully deleted course.")
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Failed to delete course. Error: {e}")
+            else:
+                st.error("Course not found.")
+
+def update_course2():
+    st.header("Update Course")
+    courses = get_all_courses()
+
+    if not courses:
+        st.write("No courses available.")
+        return
+
+    selected_course_name = st.selectbox("Select Course to Update", [""] + [course["course_name"] for course in courses])
+
+    if selected_course_name:
+        selected_course_data = next((course for course in courses if course["course_name"] == selected_course_name), None)
+
+        if selected_course_data:
+            st.subheader("Selected Course Details:")
+            st.markdown(f"**Course Name:** {selected_course_data['course_name']}")
+            st.markdown(f"**Current Course Grade:** {selected_course_data['course_grade']}")
+            st.markdown(f"**Course Credit:** {selected_course_data['course_credit']}")
+            st.markdown(f"**Course Year:** {selected_course_data['course_year']}")
+            st.markdown(f"**Course Semester:** {selected_course_data['course_semester']}")
+
+            new_course_name = st.text_input("New Course Name", value=selected_course_data["course_name"])
+            new_grade = st.slider("New Course Grade", min_value=0, max_value=100, step=1, value=selected_course_data["course_grade"])
+            new_credit = st.number_input("New Course Credit", min_value=0.0, step=0.5, value=selected_course_data["course_credit"])
+            new_year = st.number_input("New Course Year", step=1, value=selected_course_data["course_year"])
+            new_semester = st.radio("New Semester", ["Semester A", "Semester B", "Semester C"], index=["Semester A", "Semester B", "Semester C"].index(selected_course_data["course_semester"]))
+
+            if st.button("Update Course"):
+                try:
+                    data = {
+                        "course_name": new_course_name,
+                        "course_grade": new_grade,
+                        "course_credit": new_credit,
+                        "course_year": new_year,
+                        "course_semester": new_semester
+                    }
+                    response = requests.put(f"{BACKEND_URL}/courses/{selected_course_data['id']}", json=data)
+                    response.raise_for_status()  # Raise an exception for HTTP errors
+                    st.success("Course updated successfully!")
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Failed to update course. Error: {e}")
+        else:
+            st.error("No course selected.")
 
 
 # AVERAGE CALCULATOR FUNCTIONS:
@@ -470,6 +519,7 @@ def calculate_updated_averages(courses):
     return updated_avg_all_courses, updated_avg_by_semester, updated_avg_by_year
 
 
+
 # GENERAL FUNCTIONS
 
 def get_all_courses():
@@ -525,7 +575,7 @@ def plot_average_grade_by_semester():
 
 def home():
     # Add logo and title for the home page
-    st.image(r"/home/im159/grades-calculator/grades-calculator/frontend/LOGO-CALCULATOR2.png", width=400)
+    st.image(r"/home/im159/grades-calculator/grades-calculator/frontend/LOGO-CALCULATOR2.png", width=450)
     st.title("Welcome to the Grades Calculator App!")
     st.write("This app allows you to view, add, and calculate averages for courses.")
 
@@ -534,33 +584,24 @@ def home():
 
 def main():
 
-    page_bg_color = "#87CEFA"
 
+    st.sidebar.image(r"/home/im159/grades-calculator/grades-calculator/frontend/LOGO-CALCULATOR2.png", width=250)
 
-    st.markdown(
-    f"""
-    <style>
-        .reportview-container {{
-            background-color: {page_bg_color};
-        }}
-    </style>
-    """,
-    unsafe_allow_html=True
-    )
-
-    menu = ["Home", "Create", "View/ Change", "Calculate Average", "Simulate Grade Change"]
+    menu = ["Home", "Create", "View/ Update/ Delete", "Update Course", "Calculate Average", "Simulate Grade Change"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Home":
         home()
     elif choice == "Create":
         create_course()
-    elif choice == "View/ Change":
+    elif choice == "View/ Update/ Delete":
         view_course()
     elif choice == "Calculate Average":
         calculate_average()
     elif choice == "Simulate Grade Change":
         simulate_grade_change()
+    elif choice == "Update Course":
+        update_course2()  # Call the new function here
 
 
 if __name__ == "__main__":
