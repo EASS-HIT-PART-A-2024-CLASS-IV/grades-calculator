@@ -5,13 +5,11 @@
 
 # Welcome to the Grades Calculator App!
 
-
-# Grades Calculator App
-
 This application is designed to help you manage and analyze your courses and grades with ease. Whether you're a student keeping track of your academic progress or an educator managing course data, this app provides a user-friendly interface to view, add, update, and delete courses, calculate weighted averages, and even simulate grade changes.
 
 Enjoy exploring your academic journey with the Grades Calculator App!
 
+# Grades Calculator App
 
 This project is a Grades Calculator application that built with:
 
