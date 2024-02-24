@@ -1,9 +1,32 @@
 import json
-from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
 from main import app
+from pydantic import BaseModel
+from unittest.mock import patch
 
 client = TestClient(app)
+
+class Course(BaseModel):
+    course_name: str
+    course_grade: int
+    course_credit: float
+    course_year: int
+    course_semester: str
+
+class CourseInResponse(BaseModel):
+    course_name: str
+    course_grade: int
+    course_credit: float
+    course_year: int
+    course_semester: str
+
+class CourseInDB(BaseModel):
+    id: str
+    course_name: str
+    course_grade: int
+    course_credit: float
+    course_year: int
+    course_semester: str
 
 @patch("main.r")
 def test_create_course(mock_redis):
@@ -17,6 +40,8 @@ def test_create_course(mock_redis):
     }
     response = client.post("/courses/", json=sample_course)
     assert response.status_code == 200
+    assert response.json()["course_name"] == sample_course["course_name"]
+    # Add more assertions for other fields if needed
 
 @patch("main.r")
 def test_get_course(mock_redis):
@@ -33,7 +58,6 @@ def test_get_course(mock_redis):
     # Ignore the 'id' key before comparison
     assert {k: v for k, v in response.json()['course'].items() if k != 'id'} == sample_course
 
-
 @patch("main.r")
 def test_update_course(mock_redis):
     sample_course = {
@@ -47,13 +71,11 @@ def test_update_course(mock_redis):
     response = client.put("/courses/1", json=sample_course)
     assert response.status_code == 200
 
-
 @patch("main.r")
 def test_delete_course(mock_redis):
     mock_redis.delete.return_value = True
     response = client.delete("/courses/1")
     assert response.status_code == 200
-
 
 @patch("main.r")
 def test_get_all_courses(mock_redis):
@@ -82,7 +104,6 @@ def test_get_all_courses(mock_redis):
     for course in sorted_response:
         course.pop('id', None)
     assert sorted_response == sorted_sample_courses
-
 
 @patch("main.r")
 def test_get_average_year(mock_redis):
