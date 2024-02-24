@@ -534,9 +534,8 @@ def home():
     st.write("Enjoy exploring your academic journey with the Grades Calculator App!")
 
     # Button to link to GitHub project
-    if st.button("View more on GitHub"):
-        link = "[GitHub Repository](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator)"
-        st.markdown(link, unsafe_allow_html=True)
+    if st.button("View on GitHub"):
+        st.markdown("[GitHub Repository](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator)")
 
     st.image(r"/home/im159/grades-calculator/grades-calculator/frontend/hit-logo.png", width=100)
     st.write("Created by Idan Marzouk - Computer science student H.I.T")
