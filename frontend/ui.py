@@ -519,7 +519,7 @@ def plot_average_grade_by_semester():
                 plt.ylabel('Weighted Average')
                 plt.xticks(rotation=45)
                 plt.tight_layout()
-                st.pyplot(plt)  # Display the plot in Streamlit
+                st.pyplot(plt)
             else:
                 st.write("No data available to plot.")
         else:
