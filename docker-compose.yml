@@ -15,7 +15,7 @@ services:
     networks:
       - deploy_network
     container_name: frontend
-    command: streamlit run ui.py --server.port 8501
+    command: streamlit run ui.py
   redis:
     container_name: redis
     image: "redis:latest"
