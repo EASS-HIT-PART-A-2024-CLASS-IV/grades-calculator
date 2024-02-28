@@ -10,6 +10,7 @@ from typing import List
 app = FastAPI()
 r = redis.Redis(host="redis", port=6379, db=0)
 
+
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
