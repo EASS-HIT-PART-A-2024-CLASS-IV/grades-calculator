@@ -1,6 +1,6 @@
-FROM python:3.9
-RUN mkdir /frontend
-WORKDIR /frontend
-COPY . /frontend
-RUN pip install -r requirements.txt
+FROM python:3.11.6
+WORKDIR /app
+COPY . /app
+RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8501
+CMD ["streamlit", "run", "ui.py"]

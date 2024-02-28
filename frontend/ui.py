@@ -14,7 +14,7 @@ from collections import defaultdict
 
 
 # Backend URL
-BACKEND_URL = "http://localhost:8080"
+BACKEND_URL = "http://backend:8080"
 
 current_year = datetime.now().year
 
@@ -116,11 +116,11 @@ def simulate_grade_change():
 
         if selected_course_data:
             st.subheader("Selected Course Details:")
-            st.markdown(f"**Course Name:** {selected_course_data['course_name']}")
-            st.markdown(f"**Current Course Grade:** {selected_course_data['course_grade']}")
-            st.markdown(f"**Course Credit:** {selected_course_data['course_credit']}")
-            st.markdown(f"**Course Year:** {selected_course_data['course_year']}")
-            st.markdown(f"**Course Semester:** {selected_course_data['course_semester']}")
+            st.markdown(f"*Course Name:* {selected_course_data['course_name']}")
+            st.markdown(f"*Current Course Grade:* {selected_course_data['course_grade']}")
+            st.markdown(f"*Course Credit:* {selected_course_data['course_credit']}")
+            st.markdown(f"*Course Year:* {selected_course_data['course_year']}")
+            st.markdown(f"*Course Semester:* {selected_course_data['course_semester']}")
 
             new_grade = st.slider("New Course Grade", min_value=0, max_value=100, step=1, value=selected_course_data["course_grade"])
 
@@ -186,12 +186,12 @@ def print_course(courses, selected_course_name):
 
     if selected_course_data:
         st.subheader("Selected Course Details:")
-        st.markdown(f"**Course Name:** {selected_course_data['course_name']}")
-        st.markdown(f"**Course Grade:** {selected_course_data['course_grade']}")
-        st.markdown(f"**Course Credit:** {selected_course_data.get('course_credit', 'Information not available')}")
-        st.markdown(f"**Course Year:** {selected_course_data['course_year']}")
-        st.markdown(f"**Course Semester:** {selected_course_data['course_semester']}")
-        st.markdown(f"**Course ID:** {selected_course_data['id']}")
+        st.markdown(f"*Course Name:* {selected_course_data['course_name']}")
+        st.markdown(f"*Course Grade:* {selected_course_data['course_grade']}")
+        st.markdown(f"*Course Credit:* {selected_course_data.get('course_credit', 'Information not available')}")
+        st.markdown(f"*Course Year:* {selected_course_data['course_year']}")
+        st.markdown(f"*Course Semester:* {selected_course_data['course_semester']}")
+        st.markdown(f"*Course ID:* {selected_course_data['id']}")
         
     else:
         st.error("No course selected.")
@@ -507,7 +507,7 @@ def plot_average_grade_by_semester():
                 averages[year_semester] = weighted_average
 
             # Sort the keys of the averages dictionary by year and then by semester
-            sorted_keys = sorted(averages.keys(), key=lambda x: (int(x.split('_')[0]), x.split('_')[1]))
+            sorted_keys = sorted(averages.keys(), key=lambda x: (int(x.split('')[0]), x.split('')[1]))
             sorted_averages = {key: averages[key] for key in sorted_keys}
 
             # Plotting the line graph
@@ -528,7 +528,7 @@ def plot_average_grade_by_semester():
         st.write("No courses available.")
 
 def home():
-    st.image(r"/home/im159/grades-calculator/grades-calculator/frontend/mylogo.png", width=400)
+    st.image(r"mylogo.png", width=400)
     st.header("Welcome to the Grades Calculator App!")
     st.write("This application is designed to help you manage and analyze your courses and grades with ease. Whether you're a student keeping track of your academic progress or an educator managing course data, this app provides a user-friendly interface to view, add, update, and delete courses, calculate weighted averages, and even simulate grade changes.")
     st.write("Enjoy exploring your academic journey with the Grades Calculator App!")
@@ -537,14 +537,14 @@ def home():
     if st.button("View on GitHub"):
         st.markdown("[GitHub Repository](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator)")
 
-    st.image(r"/home/im159/grades-calculator/grades-calculator/frontend/hit-logo.png", width=100)
+    st.image(r"hit-logo.png", width=100)
     st.write("Created by Idan Marzouk - Computer science student H.I.T")
     st.write("The project was done as part of the EASS course in H.I.T")
 
 
 
 def main():
-    st.sidebar.image(r"/home/im159/grades-calculator/grades-calculator/frontend/mylogo.png", width=250)
+    st.sidebar.image(r"mylogo.png", width=250)
 
     menu = ["Home", "Create", "View/ Update/ Delete", "Calculate Average", "Simulate Grade Change"]
     choice = st.sidebar.selectbox("Menu", menu)
@@ -563,5 +563,5 @@ def main():
 
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
