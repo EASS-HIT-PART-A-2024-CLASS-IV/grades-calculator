@@ -34,10 +34,11 @@ def create_course():
     course_semester = st.radio("Semester", ["Semester A", "Semester B", "Semester C"])
 
     if st.button("Add New Course"):
-        # Check if the user has selected an option other than the blank one
-        if course_semester == "":
-            st.warning("Please select a semester.")
+        # Check if the user has entered a course name
+        if not course_name.strip():  # Check if the course name is blank or only contains whitespace
+            st.warning("Please enter a course name.")
             return
+
 
         data = {
             "course_name": course_name,
@@ -213,6 +214,11 @@ def update_course(courses, selected_course_name):
         new_semester = st.radio("New Semester", ["Semester A", "Semester B", "Semester C"], index=["Semester A", "Semester B", "Semester C"].index(selected_course["course_semester"]))
             
         if st.button("Update Course"):
+            # Check if the user has entered a new course name
+            if not new_course_name.strip():  # Check if the new course name is blank or only contains whitespace
+                st.warning("Please enter a new course name.")
+                return
+            
             try:
                 data = {
                     "course_name": new_course_name,
@@ -221,6 +227,8 @@ def update_course(courses, selected_course_name):
                     "course_year": new_year,
                     "course_semester": new_semester
                 }
+
+                
                 response = requests.put(f"{BACKEND_URL}/courses/{selected_course['id']}", json=data)
                 response.raise_for_status()  # Raise an exception for HTTP errors
                 st.success("Course updated successfully!")
@@ -507,7 +515,7 @@ def plot_average_grade_by_semester():
                 averages[year_semester] = weighted_average
 
             # Sort the keys of the averages dictionary by year and then by semester
-            sorted_keys = sorted(averages.keys(), key=lambda x: (int(x.split('')[0]), x.split('')[1]))
+            sorted_keys = sorted(averages.keys(), key=lambda x: (int(x.split('_')[0]), x.split('_')[1]))
             sorted_averages = {key: averages[key] for key in sorted_keys}
 
             # Plotting the line graph
@@ -529,7 +537,7 @@ def plot_average_grade_by_semester():
 
 def home():
     st.image(r"mylogo.png", width=400)
-    st.header("Welcome to the Grades Calculator App!")
+    st.header("Welcome to the Grades Calculator 2222 App!")
     st.write("This application is designed to help you manage and analyze your courses and grades with ease. Whether you're a student keeping track of your academic progress or an educator managing course data, this app provides a user-friendly interface to view, add, update, and delete courses, calculate weighted averages, and even simulate grade changes.")
     st.write("Enjoy exploring your academic journey with the Grades Calculator App!")
 
@@ -538,9 +546,7 @@ def home():
         st.markdown("[GitHub Repository](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator)")
 
     st.image(r"hit-logo.png", width=100)
-    st.write("Created by Idan Marzouk - Computer science student H.I.T")
-    st.write("The project was done as part of the EASS course in H.I.T")
-
+    st.write("This application Created by Idan Marzouk - Computer science student as part of the EASS course in H.I.T")
 
 
 def main():
@@ -561,7 +567,5 @@ def main():
         simulate_grade_change()
 
 
-
-
-if _name_ == "_main_":
+if __name__ == "__main__":
     main()
