@@ -537,7 +537,7 @@ def plot_average_grade_by_semester():
 
 def home():
     st.image(r"mylogo.png", width=400)
-    st.header("Welcome to the Grades Calculator 2222 App!")
+    st.header("Welcome to the Grades Calculator App!")
     st.write("This application is designed to help you manage and analyze your courses and grades with ease. Whether you're a student keeping track of your academic progress or an educator managing course data, this app provides a user-friendly interface to view, add, update, and delete courses, calculate weighted averages, and even simulate grade changes.")
     st.write("Enjoy exploring your academic journey with the Grades Calculator App!")
 
@@ -546,7 +546,7 @@ def home():
         st.markdown("[GitHub Repository](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator)")
 
     st.image(r"hit-logo.png", width=100)
-    st.write("This application Created by Idan Marzouk - Computer science student as part of the EASS course in H.I.T")
+    st.write("This application was created by Idan Marzouk, a computer science student, as part of the EASS course at H.I.T.")
 
 
 def main():
