@@ -65,7 +65,7 @@ docker-compose up
 ```
 
 
-This will build the Docker images and start the containers. Once the containers are running, you can access the frontend in your web browser at http://localhost:8502.
+This will build the Docker images and start the containers. Once the containers are running, you can access the frontend in your web browser at [http://localhost:8501](http://localhost:8501/).
 
 # How to use
 This Grades Calculator App has four main sections, which can be accessed via the menu in the sidebar:
