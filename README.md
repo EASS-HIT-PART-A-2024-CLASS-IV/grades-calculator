@@ -1,6 +1,5 @@
+![My Logo](https://raw.githubusercontent.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator/main/assets/131989545/c214de5f-f324-4313-99dd-a0301a6e06e4/mylogo.png)
 
- [![image](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator/assets/131989545/c214de5f-f324-4313-99dd-a0301a6e06e4)
-](https://github.com/EASS-HIT-PART-A-2024-CLASS-IV/grades-calculator/blob/main/frontend/mylogo.png)
 
 
 # Welcome to the Grades Calculator App!
