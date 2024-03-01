@@ -8,6 +8,11 @@ This application is designed to help you manage and analyze your courses and gra
 
 Enjoy exploring your academic journey with the Grades Calculator App!
 
+
+# Demo
+https://youtu.be/MaYMnI8MgHo?si=vxPrDQ_hlFdE1TY-
+
+
 # Grades Calculator App
 
 This project is a Grades Calculator application that built with:
