@@ -9,8 +9,8 @@ This application is designed to help you manage and analyze your courses and gra
 Enjoy exploring your academic journey with the Grades Calculator App!
 
 
-# Demo
-https://youtu.be/MaYMnI8MgHo?si=vxPrDQ_hlFdE1TY-
+# Preview video
+[Youtube Link](https://youtu.be/MaYMnI8MgHo?si=vxPrDQ_hlFdE1TY-)
 
 
 # Grades Calculator App
@@ -109,3 +109,6 @@ You can see the influence on the total average, year average, and the semester a
 - FastAPI - A modern, fast (high-performance) web framework for building APIs with Python 3.7+ based on standard Python type hints.
 - Streamlit - An open-source app framework for Machine Learning and Data Science teams.
 - Redis - An open-source, in-memory data structure store, used as a database, cache, and message broker.
+
+# Author
+Idan Marzouk
